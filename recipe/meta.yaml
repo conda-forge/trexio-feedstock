@@ -44,7 +44,7 @@ build:
   skip: true  # [win]
   string: {{ mpi_prefix }}_h{{ PKG_HASH }}_{{ build }}
   run_exports:
-    - {{ pin_subpackage('trexio', max_pin='x.x.x') }} {{ build_pin }}
+    - {{ pin_compatible('trexio', max_pin='x.x.x') }} {{ build_pin }}
 
 requirements:
   build:
