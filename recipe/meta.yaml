@@ -1,7 +1,6 @@
-
 {% set name = "trexio" %}
-{% set version = "2.2.0" %}
-{% set build = 1 %}
+{% set version = "2.2.3" %}
+{% set build = 0 %}
 
 # recipe-lint fails if mpi is undefined
 {% set mpi = mpi or 'nompi' %}
@@ -37,7 +36,7 @@ package:
 
 source:
   url: https://github.com/TREX-CoE/trexio/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: e6340c424fcea18ae0b643a5707e16005c7576ee21a5aac679fbc132d70b36d9
+  sha256: 1c16987fa6afe400de8b1c0d98270263f6f380278d8c0f2b9ad5156352d653ff
 
 build:
   number: {{ build }}
@@ -52,7 +51,7 @@ requirements:
     - {{ compiler('fortran') }}
     - {{ mpi }}  # [mpi == 'openmpi' and build_platform != target_platform]
     - cmake
-    - gnuconfig 
+    - gnuconfig
     - make
     - pkg-config
 
@@ -68,9 +67,9 @@ test:
 about:
   home: https://github.com/TREX-CoE/trexio
   license: BSD-3-Clause
-  license_family: BSD 
+  license_family: BSD
   license_file: COPYING
-  summary: 'TREX library for efficient I/O'
+  summary: TREX library for efficient I/O
   description: |
     The TREXIO library defines a standard format for storing wave functions, 
     together with an C-compatible API such that it can be easily used in 
