@@ -1,5 +1,5 @@
 {% set name = "trexio" %}
-{% set version = "2.3.1" %}
+{% set version = "2.3.2" %}
 {% set build = 0 %}
 
 # recipe-lint fails if mpi is undefined
@@ -36,7 +36,7 @@ package:
 
 source:
   url: https://github.com/TREX-CoE/trexio/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 41145ec808f2fbb6b03e3b191b3828e5439cef0507c5afd1016b3cb4e31dde14
+  sha256: b6e831ea5430115a305626695649d823163e7404fd088fc265f0cbe2c1b46ee0
 
 build:
   number: {{ build }}
