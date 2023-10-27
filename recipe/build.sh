@@ -1,4 +1,7 @@
 #!/bin/bash
+# Get an updated config.sub and config.guess
+cp $BUILD_PREFIX/share/gnuconfig/config.* .
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./build-config
 
 #set -e
 set -x
@@ -39,5 +42,7 @@ cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
 make -j${CPU_COUNT} ${VERBOSE_CM}
 make install
 
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR}" != "" ]]; then
 ctest -VV --output-on-failure -j${CPU_COUNT} || true
+fi
 
