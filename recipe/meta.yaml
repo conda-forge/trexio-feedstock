@@ -1,5 +1,5 @@
 {% set name = "trexio" %}
-{% set version = "2.4.2" %}
+{% set version = "2.5.0" %}
 {% set build = 0 %}
 
 # recipe-lint fails if mpi is undefined
@@ -36,7 +36,7 @@ package:
 
 source:
   url: https://github.com/TREX-CoE/trexio/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 074c7cf18ea7a8a1d5e29bde4a773d4fb80081c4eb52e2dc4299e6075b704c93
+  sha256: 7bf7e0021467530b4946fb3f6ee39f393e2f4bd65a6f4debaec774120c29e4ee
 
 build:
   number: {{ build }}
@@ -49,6 +49,7 @@ requirements:
   build:
     - gnuconfig  # [unix]
     - {{ compiler('c') }}
+    - {{ stdlib("c") }}
     - {{ compiler('fortran') }}
     - {{ mpi }}  # [mpi == 'openmpi' and build_platform != target_platform]
     - cmake
