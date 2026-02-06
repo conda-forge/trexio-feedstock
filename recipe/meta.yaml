@@ -36,7 +36,7 @@ package:
 
 source:
   url: https://github.com/TREX-CoE/trexio/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 1ed11a4c9ece9d0690c80708b84fccc1dc3e4e62c7566ed755755d8d41baba21
+  sha256: c3694ec1528632a386a2af89199c75d70ecd45bfcc2ca1d4ccccbfa1308ad5fa
 
 build:
   number: {{ build }}
