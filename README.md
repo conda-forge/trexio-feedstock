@@ -14,7 +14,7 @@ Development: https://github.com/TREX-CoE/trexio
 Documentation: https://trex-coe.github.io/trexio/
 
 The TREXIO library defines a standard format for storing wave functions,
-together with an C-compatible API such that it can be easily used in
+together with a C-compatible API such that it can be easily used in
 any programming language.
 
 Current build status
@@ -97,6 +97,7 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-trexio-green.svg)](https://anaconda.org/conda-forge/trexio) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/trexio.svg)](https://anaconda.org/conda-forge/trexio) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/trexio.svg)](https://anaconda.org/conda-forge/trexio) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/trexio.svg)](https://anaconda.org/conda-forge/trexio) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-trexio--python-green.svg)](https://anaconda.org/conda-forge/trexio-python) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/trexio-python.svg)](https://anaconda.org/conda-forge/trexio-python) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/trexio-python.svg)](https://anaconda.org/conda-forge/trexio-python) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/trexio-python.svg)](https://anaconda.org/conda-forge/trexio-python) |
 
 Installing trexio
 =================
@@ -108,31 +109,73 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `trexio` can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
-conda install trexio
+conda install trexio trexio-python
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
-mamba install trexio
+mamba install trexio trexio-python
 ```
 
-It is possible to list all of the versions of `trexio` available on your platform with `conda`:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+# for adding to your local project
+pixi add trexio trexio-python
+# for installing globally
+pixi global install trexio trexio-python
+```
+
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `trexio` available on your platform:
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda search trexio --channel conda-forge
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba search trexio --channel conda-forge
 ```
 
-Alternatively, `mamba repoquery` may provide more information:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search trexio --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
 
 ```
 # Search all versions available on your platform:
@@ -144,6 +187,8 @@ mamba repoquery whoneeds trexio --channel conda-forge
 # List dependencies of `trexio`:
 mamba repoquery depends trexio --channel conda-forge
 ```
+
+</details>
 
 
 About conda-forge

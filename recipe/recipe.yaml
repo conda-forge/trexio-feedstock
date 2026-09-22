@@ -1,60 +1,112 @@
 schema_version: 1
 
 context:
-  name: "trexio"
+  name: trexio
   version: "2.6.1"
   mpi_prefix: ${{ "nompi" if mpi == "nompi" else "mpi_" + mpi }}
 
-package:
+recipe:
   name: ${{ name }}
   version: ${{ version }}
 
 source:
-  url: https://github.com/TREX-CoE/trexio/releases/download/v${{ version }}/${{ name }}-${{ version }}.tar.gz
-  sha256: c3694ec1528632a386a2af89199c75d70ecd45bfcc2ca1d4ccccbfa1308ad5fa
+  # C library release distribution.
+  - url: https://github.com/TREX-CoE/trexio/releases/download/v${{ version }}/${{ name }}-${{ version }}.tar.gz
+    sha256: c3694ec1528632a386a2af89199c75d70ecd45bfcc2ca1d4ccccbfa1308ad5fa
+    target_directory: c-source
+
+  # Python source distribution with the generated wrapper and Python modules.
+  - url: https://pypi.org/packages/source/t/trexio/trexio-${{ version }}.tar.gz
+    sha256: 2e2e1d37fb1c2f371cfa32d07434d1d703e7500eaf7590b01fe9ba5169829447
+    target_directory: python-source
 
 build:
-  # Prioritize nompi via build number
-  number: ${{ 4 + (100 if mpi == "nompi" else 0) }}
+  # Prioritize nompi via build number.
+  number: ${{ 5 + (100 if mpi == "nompi" else 0) }}
   skip:
     - win
-  string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
 
-requirements:
-  build:
-    - ${{ compiler("c") }}
-    - ${{ compiler("fortran") }}
-    - if: mpi != "nompi"
-      then: ${{ mpi }}
-    - cmake
-    - ninja
-    - pkg-config
-  host:
-    - if: mpi == "nompi"
-      then: hdf5 >=2.1
-      else:
-        - ${{ mpi }}
-        - "hdf5 * ${{ mpi_prefix }}_*"
-    - zlib
-  run:
-    - if: mpi != "nompi"
-      then: ${{ mpi }}
+outputs:
+  - package:
+      name: trexio
 
-tests:
-  - package_contents:
-      include:
-        - ${{ name }}.h
-      lib:
-        - lib${{ name }}
+    build:
+      string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
+      script:
+        - cd c-source
+        - bash "$RECIPE_DIR/build-c.sh"
+
+    requirements:
+      build:
+        - ${{ stdlib("c") }}
+        - ${{ compiler("c") }}
+        - ${{ compiler("fortran") }}
+        - if: mpi != "nompi"
+          then: ${{ mpi }}
+        - cmake
+        - ninja
+        - pkg-config
+
+      host:
+        - if: mpi == "nompi"
+          then: hdf5 >=2.1
+          else:
+            - ${{ mpi }}
+            - hdf5 * ${{ mpi_prefix }}_*
+        - zlib
+
+      run:
+        - if: mpi != "nompi"
+          then: ${{ mpi }}
+
+    tests:
+      - package_contents:
+          include:
+            - trexio.h
+          lib:
+            - libtrexio
+
+  - package:
+      name: trexio-python
+
+    build:
+      script:
+        # Verify that both official distributions expose the same C API.
+        - cmp python-source/src/trexio.h c-source/include/trexio.h
+
+        # The helper links the extension against the exact sibling TREXIO
+        # package installed in $PREFIX.
+        - TREXIO_SOURCE_DIR="$PWD/python-source" bash "$RECIPE_DIR/build_against_installed.sh"
+
+    requirements:
+      build:
+        - ${{ stdlib("c") }}
+        - ${{ compiler("c") }}
+
+      host:
+        - python
+        - numpy
+        - ${{ pin_subpackage("trexio", exact=True) }}
+
+      run:
+        - python
+        - numpy
+        - ${{ pin_subpackage("trexio", exact=True) }}
+
+    tests:
+      - python:
+          imports:
+            - trexio
+            - pytrexio.pytrexio
 
 about:
   homepage: https://github.com/TREX-CoE/trexio
   license: BSD-3-Clause
-  license_file: COPYING
+  license_file: c-source/COPYING
   summary: TREX library for efficient I/O
   description: |
     The TREXIO library defines a standard format for storing wave functions,
-    together with an C-compatible API such that it can be easily used in
+    together with a C-compatible API such that it can be easily used in
     any programming language.
   documentation: https://trex-coe.github.io/trexio/
   repository: https://github.com/TREX-CoE/trexio
